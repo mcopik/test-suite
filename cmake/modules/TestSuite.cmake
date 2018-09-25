@@ -53,9 +53,15 @@ function(llvm_test_executable_no_test target)
   # only interprets inputs starting with '-' as flags.
   append_target_flags(LINK_LIBRARIES ${target} ${LDFLAGS})
   set(target_path ${CMAKE_CURRENT_BINARY_DIR}/${target})
+
   if(TEST_SUITE_PROFILE_USE)
-    append_target_flags(COMPILE_FLAGS ${target} -fprofile-instr-use=${target_path}.profdata)
-    append_target_flags(LINK_LIBRARIES ${target} -fprofile-instr-use=${target_path}.profdata)
+    if(TEST_SUITE_PROFILE_IR)
+      set(PROFILE_USE_FLAG -fprofile-use)
+    else()
+      set(PROFILE_USE_FLAG -fprofile-instr-use)
+    endif()
+    append_target_flags(COMPILE_FLAGS ${target} ${PROFILE_USE_FLAG}=${target_path}.profdata)
+    append_target_flags(LINK_LIBRARIES ${target} ${PROFILE_USE_FLAG}=${target_path}.profdata)
   endif()
 
   set_property(GLOBAL APPEND PROPERTY TEST_SUITE_TARGETS ${target})

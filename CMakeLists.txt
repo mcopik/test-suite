@@ -96,6 +96,7 @@ endif()
 # Enable profile generate mode in lit. Note that this does not automatically
 # add something like -fprofile-instr-generate to the compiler flags.
 option(TEST_SUITE_PROFILE_GENERATE "Enable lit profile generate mode" OFF)
+option(TEST_SUITE_PROFILE_IR "Enable IR PGO instrumentation" OFF)
 # Set value to python style True/False
 if(TEST_SUITE_PROFILE_GENERATE)
   find_program(TEST_SUITE_LLVM_PROFDATA NAMES "llvm-profdata"
@@ -107,9 +108,14 @@ Make sure it is in your path or set TEST_SUITE_PROFILE_GENERATE to OFF")
   endif()
 
   set(TEST_SUITE_PROFILE_GENERATE "True")
-  list(APPEND CFLAGS -fprofile-instr-generate)
-  list(APPEND CXXFLAGS -fprofile-instr-generate)
-  list(APPEND LDFLAGS -fprofile-instr-generate)
+  if(TEST_SUITE_PROFILE_IR)
+    set(PROFILE_FLAG -fprofile-generate)
+  else()
+    set(PROFILE_FLAG -fprofile-instr-generate)
+  endif()
+  list(APPEND CFLAGS ${PROFILE_FLAG})
+  list(APPEND CXXFLAGS ${PROFILE_FLAG})
+  list(APPEND LDFLAGS ${PROFILE_FLAG})
 else()
   set(TEST_SUITE_PROFILE_GENERATE "False")
 endif()
