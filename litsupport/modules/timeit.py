@@ -11,10 +11,10 @@ def _mutateCommandLine(context, commandline):
 
     timeit = "%s/tools/timeit-target" % config.test_source_root
     args = ["--limit-core", "0"]
-    args += ["--limit-cpu", "7200"]
-    args += ["--timeout", "7200"]
-    args += ["--limit-file-size", "104857600"]
-    args += ["--limit-rss-size", "838860800"]
+    args += ["--limit-cpu", "43200"]
+    args += ["--timeout", "43200"]
+    args += ["--limit-file-size", "1048576000"]
+    args += ["--limit-rss-size", "8388608000"]
     workdir = cmd.workdir
     if not config.traditional_output:
         stdout = cmd.stdout
